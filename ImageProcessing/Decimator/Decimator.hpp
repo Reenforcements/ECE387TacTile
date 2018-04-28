@@ -51,7 +51,12 @@ public:
     void setIntensityOfInterest(IntensityOfInterest intensity);
     
 private:
-
+    bool _inverted;
+    float _zoomLevel;
+    unsigned int _gridSize;
+    unsigned int _demoGridSize;
+    IntensityOfInterest _intensityOfInterest;
+    
 };
 
 #endif /* DECIMATOR_HPP */
