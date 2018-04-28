@@ -49,6 +49,8 @@
         <linkerTool>
           <linkerLibItems>
             <linkerOptionItem>-lopencv_core -lopencv_imgproc -lopencv_videoio -lopencv_highgui</linkerOptionItem>
+            <linkerOptionItem>-lopencv_imgcodecs</linkerOptionItem>
+            <linkerOptionItem>-lopencv_objdetect</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

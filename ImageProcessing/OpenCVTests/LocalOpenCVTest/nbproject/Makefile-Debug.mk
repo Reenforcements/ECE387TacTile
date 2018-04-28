@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lopencv_core -lopencv_imgproc -lopencv_videoio -lopencv_highgui
+LDLIBSOPTIONS=-lopencv_core -lopencv_imgproc -lopencv_videoio -lopencv_highgui -lopencv_imgcodecs -lopencv_objdetect
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
