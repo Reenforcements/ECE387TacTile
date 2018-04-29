@@ -39,7 +39,7 @@ Decimator::~Decimator() {
 }
 
 
-void Decimator::getImage(cv::Mat src, cv::Mat &dest) const {
+void Decimator::getImage(cv::Mat src, const cv::Mat &dest) const {
     
     int srcWidth = src.size().width;
     int srcHeight = src.size().height;
@@ -54,6 +54,11 @@ void Decimator::getImage(cv::Mat src, cv::Mat &dest) const {
                 targetSize);
     
     // Crop the image so we can down sample it from there.
+    src = src(zoomRect);
+    int zoomedWidth = src.size().width;
+    int zoomedHeight = src.size().height;
+    
+    //resize(src, dst, Size(), factor, factor, InterpolationFlags::INTER_LANCZOS4);
 }
 
 void Decimator::getVisualImage(cv::Mat src, cv::Mat &dest) const {
