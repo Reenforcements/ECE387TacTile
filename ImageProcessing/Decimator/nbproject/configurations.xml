@@ -43,6 +43,7 @@
         <linkerTool>
           <linkerLibItems>
             <linkerOptionItem>-lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_videoio</linkerOptionItem>
+            <linkerOptionItem>-lopencv_photo</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

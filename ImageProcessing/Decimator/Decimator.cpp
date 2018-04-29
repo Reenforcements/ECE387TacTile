@@ -61,12 +61,35 @@ cv::Mat Decimator::getImage(cv::Mat src) const {
     src = src(zoomRect);
     int zoomedLength = src.size().width;
     
+    // Get an image using only the components we want
+    // BGR for color images
+    cv::Mat extracted;
+    switch(_intensityOfInterest) {
+        case RED:
+            cv::extractChannel(src, extracted, 2);
+            break;
+        case BLUE:
+            cv::extractChannel(src, extracted, 0);
+            break; 
+        case GREEN:
+            cv::extractChannel(src, extracted, 1);
+            break;
+        case INTENSITY:
+            // Do nothing
+            extracted = src;
+            break;
+        default:
+            break;
+   }
+    
+    // Should probably factor in the standard deviation somewhere here.
+    
     // Find our scale factor based on our zoomed image
     //  and how many pixels long/wide it should be.
     float pixelScaleFactor = static_cast<float>(_gridSize) / static_cast<float>(zoomedLength);
     
     cv::Mat dst;
-    cv::resize(src, dst, cv::Size(), pixelScaleFactor, pixelScaleFactor, cv::InterpolationFlags::INTER_LANCZOS4);
+    cv::resize(extracted, dst, cv::Size(), pixelScaleFactor, pixelScaleFactor, cv::InterpolationFlags::INTER_LANCZOS4);
     return dst;
 }
 

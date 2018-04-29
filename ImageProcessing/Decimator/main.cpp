@@ -45,8 +45,6 @@ int main(int argc, char** argv) {
         Mat input;
         cap >> input;
         
-        //imshow("decimatorTest", input);
-        
         int key = waitKey(10);
         switch(key) {
             case '-':
@@ -60,7 +58,7 @@ int main(int argc, char** argv) {
                 decimator.setZoomLevel(zoomLevel);
                 break;
             case '[':
-                demoSize = (demoSize == 1) ? 1 : demoSize;
+                demoSize = (demoSize <= 2) ? 2 : demoSize;
                 demoSize--;
                 decimator.setGridSize(demoSize);
                 break;
@@ -68,6 +66,18 @@ int main(int argc, char** argv) {
                 demoSize = (demoSize >= 720) ? 720 : demoSize;
                 demoSize++;
                 decimator.setGridSize(demoSize);
+                break;
+            case 'r':
+                decimator.setIntensityOfInterest(Decimator::RED);
+                break;
+            case 'g':
+                decimator.setIntensityOfInterest(Decimator::GREEN);
+                break;
+            case 'b':
+                decimator.setIntensityOfInterest(Decimator::BLUE);
+                break;
+            case 'i':
+                decimator.setIntensityOfInterest(Decimator::INTENSITY);
                 break;
             
             case 'k':
