@@ -7,12 +7,15 @@
 #include <stdint.h>
 
 
-int i2cFile;
+int8_t i2cFile;
 int8_t *error;
+int8_t *motorPositionArray;
 const uint8_t deviceID = 0x04;
 const uint8_t maxPacketLength = 32;
+const uint8_t numberOfMotors = 25;
 
-int8_t testConnection(int i2cFileTest);
+int8_t testConnection(int8_t i2cFileTest);
+int8_t writeToMotors(int8_t i2cFile, int8_t *positionsToWrite);
 
 typedef struct{
 	uint8_t length;
@@ -22,6 +25,7 @@ typedef struct{
 
 int main(){
 	error = (int8_t*)malloc(sizeof(int8_t));
+	motorPositionArray = (int8_t*)malloc(sizeof(int8_t)*numberOfMotors);
 
 	char *filename = (char*)"/dev/i2c-1";
 
@@ -32,15 +36,17 @@ int main(){
 	}
 
 	*error = testConnection(i2cFile);
-	if(*error == 0){
-		return 0;
-	}else{
-		return -1;
+
+	for(int i = 0; i < numberOfMotors; i++){
+		*(motorPositionArray + i) = i;
 	}
+
+	writeToMotors(i2cFile, motorPositionArray);
+
 
 }
 
-int8_t testConnection(int i2cFileTest){
+int8_t testConnection(int8_t i2cFileTest){
 	uint8_t length;
 	int8_t testData[2] = {0, 0};
 
@@ -77,6 +83,10 @@ int8_t testConnection(int i2cFileTest){
 
 	return 0;
 }
+
+int8_t writeToMotors(int8_t i2cFile, int8_t *positionsToWrite){
+	return write(i2cFile, positionsToWrite, numberOfMotors);
+};
 
 
 dataPacket formatDataPacket(int8_t *dataToSend, uint8_t packetLength){

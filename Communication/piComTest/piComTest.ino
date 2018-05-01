@@ -16,8 +16,9 @@ void setup() {
 
 void loop() {
   delay(200);
-  if(numReceived > 0 ){
+  while(numReceived > 0){
     writeToSerialMonitor(); 
+    numReceived -= 1;
   }
 }
 
@@ -42,10 +43,7 @@ void writeToPi(){
 }
 
 void writeToSerialMonitor(){
-  byte curByte;
-  for(int i = 0; i < numReceived; i++){
-    Serial.write(*(dataReceived + i));
-  }
+  Serial.println((int)*(dataReceived + (numReceived - 1)));
 }
 
 
