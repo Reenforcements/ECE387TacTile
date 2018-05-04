@@ -1,49 +1,51 @@
-#include <Wire.h>
-//uint8_t write_n = 1;
-const uint8_t deviceID = 0x04;
-uint8_t *dataReceived;
-uint8_t numReceived = 0;
-uint8_t maxReceived = 32; //Wire Library sends and receives max 32 bytes
-
+#include "piComTest.h"
+i2cToPi *pi;
 
 void setup() {
-  dataReceived = (byte*)malloc(sizeof(byte)*maxReceived);
-  Wire.begin(deviceID);
   Serial.begin(9600);
-  Wire.onRequest(writeToPi);
-  Wire.onReceive(receiveFromPi);
+  initI2CToPi();
 }
 
 void loop() {
   delay(200);
-  while(numReceived > 0){
-    writeToSerialMonitor(); 
-    numReceived -= 1;
+  while(pi->numReceiviedFromPi > 0){
+    writeToSerialMonitor();
+    pi->numReceiviedFromPi -= 1;    
   }
 }
 
-void receiveFromPi(int numBytes){
-  //write_n = 1;
+void initWire(){
+   Wire.begin(DEVICE_ID);
+   Wire.onRequest(onRequest_f);
+   Wire.onReceive(onReceive_f);
+}
+
+void initI2CToPi(){
+  pi = (i2cToPi*)malloc(sizeof(i2cToPi));
+  pi->dataReceivedFromPi = (int8_t*)malloc(sizeof(int8_t)*MAX_PACKET_SIZE);
+  initWire();
+}
+
+void onReceive_f(int numBytes){
   numBytes = Wire.available();
-  uint8_t currentByte = 0x0;
-  if(numBytes > maxReceived){
-    numBytes = maxReceived;    
+  if(numBytes > MAX_PACKET_SIZE ){
+    numBytes = MAX_PACKET_SIZE ;    
   }
-  numReceived = numBytes;
+  pi->numReceiviedFromPi = numBytes;
   for(int i = 0; i < numBytes; i++){
-    *(dataReceived + i) = Wire.read();     
+    *((pi->dataReceivedFromPi) + i) = Wire.read();     
   }
 }
 
-void writeToPi(){
-  uint8_t address = *dataReceived;
+void onRequest_f(){
+  uint8_t address = *(pi->dataReceivedFromPi);
   if(address == 0x01){
-    Wire.write(deviceID);  
+    Wire.write(DEVICE_ID);  
   }
 }
 
 void writeToSerialMonitor(){
-  Serial.println((int)*(dataReceived + (numReceived - 1)));
+  Serial.println(*((pi->dataReceivedFromPi) + (pi->numReceiviedFromPi - 1)));
 }
 
 
