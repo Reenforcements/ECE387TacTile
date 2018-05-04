@@ -7,11 +7,7 @@ void setup() {
 }
 
 void loop() {
-  delay(200);
-  while(pi->numReceiviedFromPi > 0){
-    writeToSerialMonitor();
-    pi->numReceiviedFromPi -= 1;    
-  }
+  delay(2000);
 }
 
 void initWire(){
@@ -45,7 +41,13 @@ void onRequest_f(){
 }
 
 void writeToSerialMonitor(){
-  Serial.println(*((pi->dataReceivedFromPi) + (pi->numReceiviedFromPi - 1)));
+  for(int i = 0; i < (pi->numReceiviedFromPi); i++){
+    Serial.println(*(pi->dataReceivedFromPi + i)); 
+  }
 }
 
-
+void getPiData(int8_t *workingArray){
+  for(int i = 0; i < (pi->numReceiviedFromPi); i++){
+    *(workingArray + i) = *(pi->dataReceivedFromPi + i);  
+  }
+}

@@ -15,4 +15,5 @@ void onRequest_f();
 void initWire();
 void initI2CToPi(i2cToPi *pi_r);
 void writeToSerialMonitor(i2cToPi *pi_r);
+void getPiData(int8_t *workingArray);
 
