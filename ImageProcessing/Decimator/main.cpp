@@ -95,9 +95,9 @@ int main(int argc, char** argv) {
                 << zoomLevel
                 << std::endl;
         
-        Mat result = decimator.getImage(input);
-        input = decimator.makeDemoSized(result, input);
-        imshow("decimatorTest", input);
+//        Mat result = decimator.getImage(input);
+//        input = decimator.makeDemoSized(result, input);
+//        imshow("decimatorTest", input);
     }
     exit:
     

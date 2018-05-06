@@ -23,11 +23,10 @@ public:
     virtual ~Decimator();
     
     // Retrieve the image used to move the pins
-    cv::Mat getImage(cv::Mat src) const;
+    cv::Mat getImage(cv::Mat src, unsigned int size) const;
     // Retrieve the image used for the grid
-    void getVisualImage(cv::Mat src, cv::Mat &dest) const;
-    // Make an image big for demo purposes
-    cv::Mat makeDemoSized(cv::Mat src, cv::Mat dst) const;
+    cv::Mat getDemoImage(cv::Mat src) const;
+    cv::Mat getServoImage(cv::Mat src) const;
     
     // Sets how small of a portion of the captured frame we're using
     // 0 - Use the maximum resolution

@@ -1,6 +1,7 @@
-#include "piComTest.h"
+#include "piComTestPiCode.h"
 
 
+/*
 int main(){
 	int8_t mainErrorOut = 0;
 	int8_t *testData = (int8_t*)malloc(sizeof(int8_t) * NUMBER_OF_MOTORS);
@@ -31,9 +32,10 @@ int main(){
 	}
 	writeToMotors(i2cBus, testData);
 }
+ */
 
 
-int8_t initPiI2C(char *filename, piI2C *newPiI2CBus){
+int8_t initPiI2C(const char *filename, piI2C *newPiI2CBus){
 	int8_t *writeArray_r = (int8_t*)malloc(sizeof(int8_t) * MAX_PACKET_SIZE);
 	newPiI2CBus->writeArray = writeArray_r;
 

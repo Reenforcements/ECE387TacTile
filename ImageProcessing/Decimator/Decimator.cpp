@@ -19,7 +19,7 @@
 
 Decimator::Decimator(): _inverted(false), 
                         _gridSize(5), 
-                        _demoGridSize(20), 
+                        _demoGridSize(15), 
                         _zoomLevel(1.0),
                         _intensityOfInterest(INTENSITY) 
 {
@@ -40,7 +40,7 @@ Decimator::~Decimator() {
 }
 
 
-cv::Mat Decimator::getImage(cv::Mat src) const {
+cv::Mat Decimator::getImage(cv::Mat src, unsigned int size) const {
     
     // We need the original dimensions of our source image
     int srcWidth = src.size().width;
@@ -54,7 +54,6 @@ cv::Mat Decimator::getImage(cv::Mat src) const {
                 (srcHeight / 2) - (targetSize/2), 
                 targetSize, 
                 targetSize);
-    //std::cout << zoomRect << std::endl;
     
     // Crop the image so we can down sample it from there.
     // We only need one dimension since its square at this point.
@@ -75,8 +74,8 @@ cv::Mat Decimator::getImage(cv::Mat src) const {
             cv::extractChannel(src, extracted, 1);
             break;
         case INTENSITY:
-            // Do nothing
-            extracted = src;
+            // Convert to black and white
+            cv::cvtColor(src, extracted, CV_BGR2GRAY);
             break;
         default:
             break;
@@ -86,22 +85,25 @@ cv::Mat Decimator::getImage(cv::Mat src) const {
     
     // Find our scale factor based on our zoomed image
     //  and how many pixels long/wide it should be.
-    float pixelScaleFactor = static_cast<float>(_gridSize) / static_cast<float>(zoomedLength);
+    float pixelScaleFactor = static_cast<float>(size) / static_cast<float>(zoomedLength);
     
     cv::Mat dst;
     cv::resize(extracted, dst, cv::Size(), pixelScaleFactor, pixelScaleFactor, cv::InterpolationFlags::INTER_LANCZOS4);
     return dst;
 }
 
-void Decimator::getVisualImage(cv::Mat src, cv::Mat &dest) const {
+cv::Mat Decimator::getServoImage(cv::Mat src) const {
+    return getImage(src, _gridSize);
+}
+cv::Mat Decimator::getDemoImage(cv::Mat src) const {
+    cv::Mat demoImage = getImage(src, _demoGridSize);
     
+    float scaleFactor = static_cast<float>(src.size().width) / static_cast<float>(demoImage.size().width);
+    cv::Mat dest;
+    cv::resize(demoImage, dest, cv::Size(), scaleFactor, scaleFactor, cv::InterpolationFlags::INTER_NEAREST);
+    return dest;
 }
 
-cv::Mat Decimator::makeDemoSized(cv::Mat src, cv::Mat dst) const {
-    float scaleFactor = static_cast<float>(dst.size().width) / static_cast<float>(src.size().width);
-    cv::resize(src, dst, cv::Size(), scaleFactor, scaleFactor, cv::InterpolationFlags::INTER_NEAREST);
-    return dst;
-}
 
 void Decimator::setZoomLevel(float level) {
     level = (level > 1.0) ? 1.0 : level;

@@ -19,6 +19,6 @@ typedef struct{
 
 
 
-int8_t initPiI2C(char *filename, piI2C *newPiI2CBus);
+int8_t initPiI2C(const char *filename, piI2C *newPiI2CBus);
 int8_t testConnection(piI2C *i2cBus);
 int8_t writeToMotors(piI2C *i2cBus, int8_t *positionsToWrite);
