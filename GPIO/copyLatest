@@ -1,0 +1,3 @@
+# This script copies the latest GPIO code to the Raspberry Pi
+# Copy communication code, the -I should make it overwrite old files
+rsync -r -I ../GPIO/ pi@134.53.111.213:~/Documents/OpenCV/AppTest/GPIO
