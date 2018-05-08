@@ -23,7 +23,6 @@ void initI2CToPi(){
 }
 
 void onReceive_f(int numBytes){
-  numBytes = Wire.available();
   if(numBytes > MAX_PACKET_SIZE ){
     numBytes = MAX_PACKET_SIZE ;    
   }
