@@ -37,7 +37,7 @@ bool gpioInitialized = false;
 // Towards inside of board
 const unsigned char CLOCK_PIN = 3;
 const unsigned char DATA_PIN = 4;
-unsigned long clockWaitTime = 2000;
+unsigned long clockWaitTime = 100;
 void clockByte(unsigned char b) {
     if(!gpioInitialized) {
         wiringPiSetup();
@@ -56,7 +56,7 @@ void clockByte(unsigned char b) {
         
         //std::cout << "Writing bit number: " << i << " and bit: " << ((b & (1 << i)) > 0 ) << std::endl;
         digitalWrite(DATA_PIN,  ((b & (1 << i)) > 0 ) ? HIGH : LOW  );
-        usleep(clockWaitTime);
+        //usleep(clockWaitTime);
         // Pulse clock to send bit.
         digitalWrite(CLOCK_PIN, HIGH);
         usleep(clockWaitTime);
@@ -65,6 +65,24 @@ void clockByte(unsigned char b) {
     }
 }
 
+void clockArray(unsigned char *inp, unsigned char num) {
+    for (unsigned char x = 0; x < 5; x++) {
+        for (unsigned char y = 0; y < 5; y++) {
+            unsigned char current = (unsigned char) inp[x*5 + y];
+            clockByte(current);
+        }
+    }
+}
+
+uint8_t testStar[25] 
+        = {
+    5,   5,   250, 5,   5,
+    5,   250, 250, 250, 5,
+    250, 250, 250, 250, 250,
+    5,   250, 250, 250, 5,
+    5,   5,   250, 5,   5,
+};
+
 unsigned int waiter = 0;
 int main(int argc, char** argv) {
     
@@ -72,10 +90,14 @@ int main(int argc, char** argv) {
     gpioInit();
     
     
-    while(true) {
-        clockByte(57);
-        usleep(1000000);
-    }
+    //Test shift register data output
+//    unsigned num = 0;
+//    while(true) {
+//        clockArray(reinterpret_cast<int8_t*>(&testStar), 25);
+//        usleep(100000);
+//        std::cout << "(" << time(0) << ") Sent test data " << std::endl;
+//        num++;
+//    }
     
     // Start I2C
     piI2C connection;
@@ -101,6 +123,8 @@ int main(int argc, char** argv) {
     
     Decimator decimator;
     decimator.setGridSize(5);
+    unsigned int demoSize = 5;
+    decimator.setDemoGridSize(demoSize);
     
     VideoCapture cap(0);
     if(cap.isOpened() == false) {
@@ -111,8 +135,6 @@ int main(int argc, char** argv) {
     
     // Display the output
     namedWindow("decimatorTest");
-    
-    unsigned int demoSize = 15;
         
     while(true) {
         
@@ -184,10 +206,30 @@ int main(int argc, char** argv) {
                 assert(result.total() * result.elemSize() == 25);
                 std::cout << "(" << time(0) << ") Writing " << ( result.total() * result.elemSize() ) << " bytes." << std::endl;
                 
-                int8_t error = writeToMotors(&connection, reinterpret_cast<int8_t*>(result.data));
-                if(error == -1) {
-                    std::cout << "Error writing to Arduino!" << std::endl;
+                
+                
+                for (unsigned char x = 0; x < 5; x++) {
+                    for (unsigned char y = 0; y < 5; y++) {
+                        unsigned int current = (unsigned int) result.data[x*5 + y];
+                        std::cout << current;
+                        if(current < 100) {
+                            std::cout << " ";
+                        }
+                        if(current < 10) {
+                            std::cout << " ";
+                        }
+                        // Always at least one digit
+                        std::cout << " ";
+                    }
+                    std::cout << std::endl;
                 }
+                
+                clockArray(result.data, 25);
+                
+//                int8_t error = writeToMotors(&connection, reinterpret_cast<int8_t*>(result.data));
+//                if(error == -1) {
+//                    std::cout << "Error writing to Arduino!" << std::endl;
+//                }
             } else {
                 std::cout << "Error, result not continuous!" << std::endl;
             }

@@ -10,7 +10,7 @@ volatile byte currentBit = 7;
 volatile unsigned long lastTime = millis();
 void shiftRegisterInterrupt() {
 
-    if (millis() - lastTime > 100) {
+    if (millis() - lastTime > 50) {
         currentBit = 7;
         currentMotorIndex = 0;
     }
@@ -40,11 +40,11 @@ void newCurrentByte(byte b) {
 }
 void newMotorData() {
     Serial.println("==================");
-    Serial.println("==================");
+    Serial.println(millis());
     Serial.println("==================");
     for (byte x = 0; x < 5; x++) {
         for (byte y = 0; y < 5; y++) {
-            byte current = motorData[x + y*5];
+            byte current = motorData[x*5 + y];
             Serial.print(current);
             if(current < 100) {
                 Serial.print(" ");
