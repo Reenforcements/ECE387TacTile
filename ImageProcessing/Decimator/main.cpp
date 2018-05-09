@@ -33,14 +33,49 @@ using namespace cv;
 float zoomLevel = 1.0;
 Decimator::IntensityOfInterest intensityOfInterest = Decimator::INTENSITY;
 
-/*
- * 
- */
+bool gpioInitialized = false;
+// Towards inside of board
+const unsigned char CLOCK_PIN = 3;
+const unsigned char DATA_PIN = 4;
+unsigned long clockWaitTime = 2000;
+void clockByte(unsigned char b) {
+    if(!gpioInitialized) {
+        wiringPiSetup();
+        pinMode(CLOCK_PIN, OUTPUT);
+        pullUpDnControl(CLOCK_PIN, PUD_DOWN);
+        pinMode(DATA_PIN, OUTPUT);
+        
+        digitalWrite(CLOCK_PIN, LOW);
+        gpioInitialized = true;
+        
+        usleep(clockWaitTime);
+    }
+    
+    // Get each bit individually MSB first
+    for(int i = 7; i >= 0; i--) {
+        
+        //std::cout << "Writing bit number: " << i << " and bit: " << ((b & (1 << i)) > 0 ) << std::endl;
+        digitalWrite(DATA_PIN,  ((b & (1 << i)) > 0 ) ? HIGH : LOW  );
+        usleep(clockWaitTime);
+        // Pulse clock to send bit.
+        digitalWrite(CLOCK_PIN, HIGH);
+        usleep(clockWaitTime);
+        digitalWrite(CLOCK_PIN, LOW);
+        usleep(clockWaitTime);
+    }
+}
+
 unsigned int waiter = 0;
 int main(int argc, char** argv) {
     
     // Init GPIO
     gpioInit();
+    
+    
+    while(true) {
+        clockByte(57);
+        usleep(1000000);
+    }
     
     // Start I2C
     piI2C connection;
