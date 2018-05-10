@@ -12,7 +12,7 @@
 #define TIMEOUT 2 //Timeout for debouncer
 #define BUTTON_0 0
 #define BUTTON_1 1
-#define BUTTON_2 3
+#define BUTTON_2 5
 #define LED_PIN  4
 
 int8_t gpioInit(void);
