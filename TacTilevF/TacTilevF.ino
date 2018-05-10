@@ -9,7 +9,7 @@
 #include "Driver.h"
 
 SoftServoDriver pwm1 = SoftServoDriver(0x40);
-SoftServoDriver pwm2 = SoftServoDriver(0x41);
+//SoftServoDriver pwm2 = SoftServoDriver(0x41);
 #define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
 #define SERVOMAX  535 // this is the 'maximum' pulse length count (out of 4096)
 uint8_t curVal[5][5] = {0};
@@ -19,8 +19,8 @@ void setup(){
   Serial.begin(9600);
   pwm1.begin();
   pwm1.setPWMFreq(60);
-  pwm2.begin();
-  pwm2.setPWMFreq(60);
+//  pwm2.begin();
+  //pwm2.setPWMFreq(60);
   delay(1000);
 //Wire.onReceive(&oRec_f);
   
@@ -28,9 +28,10 @@ void setup(){
 
 void loop() {
     // INTERUPT FOR INCOMING DATA REQUIRED
-    updateFrame();
-    writeImage();
-     pwm2.setPWM(1,0, 300);
+   // updateFrame();
+   // writeImage();
+
+   pwm1.setPWM(1,0, 150);
     
 }
 
@@ -57,7 +58,7 @@ void updateFrame(){
            // writeToSerialMonitor();           
         } 
 }
-
+/*
 void writeImage(){ // sets output to current values 
 //    pwm1 = Adafruit_PWMServoDriver(0x40);
 //    pwm2 = Adafruit_PWMServoDriver(0x41);
@@ -65,7 +66,8 @@ void writeImage(){ // sets output to current values
 //    pwm1.setPWMFreq(60);
 //    pwm2.begin();
 //    pwm2.setPWMFreq(60);
-//  
+
+    //pwm1.setPWM(1, 0, SERVOMIN);  
     for(int c = 0; c < 5; c++ ){
         for(int r = 0; r <5; r ++){
              double plsLen = map(curVal[c][r], 0, 255, SERVOMIN, SERVOMAX);
@@ -80,4 +82,5 @@ void writeImage(){ // sets output to current values
     }   
 
 }
+*/
 

@@ -3,13 +3,13 @@
 
 //#define I2C_PULLUP 1
 #define SDA_PORT PORTD
-#define SDA_PIN 7 // = A4
+#define SDA_PIN 6 // = A4
 #define SCL_PORT PORTD
-#define SCL_PIN 6 // = A5
+#define SCL_PIN 7 // = A5
 
 #include "Driver.h"
 
-SoftServoDriver pwm = SoftServoDriver();
+SoftServoDriver pwm = SoftServoDriver(0x41);
 #define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
 #define SERVOMAX  535 // this is the 'maximum' pulse length count (out of 4096)
 
