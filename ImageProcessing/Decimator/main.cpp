@@ -23,7 +23,7 @@
 #include "Decimator.hpp"
 
 extern "C" {
-#include "Communication/piComTestPiCode.h"
+#include "Communication/wiringPiSerial.h"
 #include "GPIO/gpioPi.h"
 }
 
@@ -84,11 +84,20 @@ uint8_t testStar[25]
     5,   5,   250, 5,   5,
 };
 
+int8_t *serialFile;
+
 unsigned int waiter = 0;
 int main(int argc, char** argv) {
     
     // Init GPIO
     gpioInit();
+    
+    if(initSerialFile("/dev/ttyACM0", serialFile, 9600) < 0){
+    	printf("%s \n", "Error Initializing Serial File:(!");
+    }else{
+    	printf("%s \n", "Serial file successfully initialized :D!");
+
+    }
     
     
     //Test shift register data output
@@ -204,7 +213,7 @@ int main(int argc, char** argv) {
                     std::cout << std::endl;
                 }
                 
-                clockArray(result.data, 25);
+                writeArray(result.data);
                 
 //                int8_t error = writeToMotors(&connection, reinterpret_cast<int8_t*>(result.data));
 //                if(error == -1) {
