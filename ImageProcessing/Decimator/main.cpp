@@ -33,6 +33,7 @@ using namespace cv;
 float zoomLevel = 1.0;
 Decimator::IntensityOfInterest intensityOfInterest = Decimator::INTENSITY;
 
+/*
 bool gpioInitialized = false;
 // Towards inside of board
 const unsigned char CLOCK_PIN = 3;
@@ -73,7 +74,7 @@ void clockArray(unsigned char *inp, unsigned char num) {
         }
     }
 }
-
+*/
 uint8_t testStar[25] 
         = {
     5,   5,   250, 5,   5,
@@ -98,27 +99,6 @@ int main(int argc, char** argv) {
 //        std::cout << "(" << time(0) << ") Sent test data " << std::endl;
 //        num++;
 //    }
-    
-    // Start I2C
-    piI2C connection;
-    const char *connectionFile = "/dev/i2c-1";
-    int8_t mainErrorOut = initPiI2C(connectionFile, &connection);
-    
-    if(mainErrorOut < 0){
-        printf("I2C File and/or Peripheral failed to initialize! :(\n");
-        return 0;
-    }else{
-        printf("I2C File and Peripheral successfully initialized! :D\n");
-    }
-    
-    mainErrorOut = testConnection(&connection);
-    
-    if(mainErrorOut < 0){
-        printf("Test Failed! :(\n");
-        usleep(2000000);
-    }else{
-        printf("Test Passed! Device is now ready for use.\n");
-    }
     
     
     Decimator decimator;
