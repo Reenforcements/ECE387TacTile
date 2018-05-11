@@ -10,5 +10,5 @@
 
 /*** Prototypes ***/
 
-void writeArray(int8_t *arrayToWrite);
-int8_t initSerialFile(char *filename, int16_t baudRate);
+void writeArray(int8_t *fp, int8_t *arrayToWrite);
+int8_t initSerialFile(char *filename, int8_t *fp, int16_t baudRate);
