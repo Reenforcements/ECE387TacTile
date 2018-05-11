@@ -21,13 +21,13 @@
 
 //#define I2C_PULLUP 1
 #define SDA_PORT PORTD
-#define SDA_PIN 7 // = A4
+#define SDA_PIN 6 // = D6
 #define SCL_PORT PORTD
-#define SCL_PIN 6 // = A5
+#define SCL_PIN 7 // = D7
 #include <SoftI2CMaster.h>
 
 // Set to true to print some debug messages, or false to disable them.
-//#define ENABLE_DEBUG_OUTPUT
+#define ENABLE_DEBUG_OUTPUT
 
 
 /**************************************************************************/
