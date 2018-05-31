@@ -33,48 +33,6 @@ using namespace cv;
 float zoomLevel = 1.0;
 Decimator::IntensityOfInterest intensityOfInterest = Decimator::INTENSITY;
 
-/*
-bool gpioInitialized = false;
-// Towards inside of board
-const unsigned char CLOCK_PIN = 3;
-const unsigned char DATA_PIN = 4;
-unsigned long clockWaitTime = 100;
-void clockByte(unsigned char b) {
-    if(!gpioInitialized) {
-        wiringPiSetup();
-        pinMode(CLOCK_PIN, OUTPUT);
-        pullUpDnControl(CLOCK_PIN, PUD_DOWN);
-        pinMode(DATA_PIN, OUTPUT);
-        
-        digitalWrite(CLOCK_PIN, LOW);
-        gpioInitialized = true;
-        
-        usleep(clockWaitTime);
-    }
-    
-    // Get each bit individually MSB first
-    for(int i = 7; i >= 0; i--) {
-        
-        //std::cout << "Writing bit number: " << i << " and bit: " << ((b & (1 << i)) > 0 ) << std::endl;
-        digitalWrite(DATA_PIN,  ((b & (1 << i)) > 0 ) ? HIGH : LOW  );
-        //usleep(clockWaitTime);
-        // Pulse clock to send bit.
-        digitalWrite(CLOCK_PIN, HIGH);
-        usleep(clockWaitTime);
-        digitalWrite(CLOCK_PIN, LOW);
-        usleep(clockWaitTime);
-    }
-}
-
-void clockArray(unsigned char *inp, unsigned char num) {
-    for (unsigned char x = 0; x < 5; x++) {
-        for (unsigned char y = 0; y < 5; y++) {
-            unsigned char current = (unsigned char) inp[x*5 + y];
-            clockByte(current);
-        }
-    }
-}
-*/
 uint8_t testStar[25] 
         = {
     5,   5,   250, 5,   5,
@@ -98,17 +56,6 @@ int main(int argc, char** argv) {
     	printf("%s \n", "Serial file successfully initialized :D!");
 
     }
-    
-    
-    //Test shift register data output
-//    unsigned num = 0;
-//    while(true) {
-//        clockArray(reinterpret_cast<int8_t*>(&testStar), 25);
-//        usleep(100000);
-//        std::cout << "(" << time(0) << ") Sent test data " << std::endl;
-//        num++;
-//    }
-    
     
     Decimator decimator;
     decimator.setGridSize(5);
